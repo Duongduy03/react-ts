@@ -20,14 +20,17 @@ const ProductManagement = (props: IPropProduct) => {
   return (
     <div>
       {/* <button><a href="/admin/products/add">Add New Product</a></button> */}
-      <button>
-        <Link to={"/admin/products/add"}>Add New Product</Link>
-      </button>
-      <table>
+      <Link to={"/admin/products/add"}>
+        <button className="btn btn-primary mb-3">Add New Product</button>
+      </Link>
+      <table className="table table-striped">
         <thead>
           <tr>
             <th>#</th>
             <th>Product Name</th>
+            <th>Price</th>
+            <th>Description </th>
+            <th>Image</th>
             <th>Action</th>
           </tr>
         </thead>
@@ -37,15 +40,23 @@ const ProductManagement = (props: IPropProduct) => {
               <tr key={product._id}>
                 <td>{index + 1}</td>
                 <td>{product.name}</td>
+                <td>{product.price}</td>
+                <td>{product.description}</td>
                 <td>
-                  <button onClick={() => removeProduct(product._id)}>
+                  <img src={product.image} width="100" />
+                </td>
+
+                <td>
+                  <button
+                    className="btn btn-danger"
+                    onClick={() => removeProduct(product._id)}
+                  >
                     Delete
                   </button>
-                  <button>
-                    <Link to={`/admin/products/update/${product._id}`}>
-                      Update
-                    </Link>
-                  </button>
+
+                  <Link to={`/admin/products/update/${product._id}`}>
+                    <button className="btn btn-warning">Update</button>
+                  </Link>
                 </td>
               </tr>
             );

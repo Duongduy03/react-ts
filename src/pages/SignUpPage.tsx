@@ -1,43 +1,54 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { IPropUser, IUser } from "../interface/Interface";
+import { IUser } from "../interface/Interface";
+import { Button, Checkbox, Form, Input } from "antd";
+interface IPropUser {
+  onAddUser: (inputValue: IUser) => void;
+}
 const SignUpPage = (props: IPropUser) => {
-  const [inputValue, setInputValue] = useState<IUser[]>([]);
   const navigate = useNavigate();
-  const onHandleChange = (e: any) => {
-    const name = e.target.name; // Lấy ra name của input
-    const value = e.target.value;
-    setInputValue({ ...inputValue, [name]: value });
-  };
-  console.log(inputValue);
-  const onHandleSubmit = (e: any) => {
-    e.preventDefault();
-    props.onAddUser(inputValue);
+  // console.log(props);
 
-    // kiểm tra thông tin đăng ký và xử lý đăng ký
+  const onFinish = (values: any) => {
+    props.onAddUser(values);
+    // navigate("/signin");
+  };
+
+  const onFinishFailed = (errorInfo: any) => {
+    console.log("Failed:", errorInfo);
   };
 
   return (
-    <form onSubmit={onHandleSubmit}>
-      <div className="from-group">
-        <label>Tên:</label>
-        <input type="text" name="name" onChange={onHandleChange} />
-      </div>
-      <div className="form-group">
-        <label>Email:</label>
-        <input type="email" name="email" onChange={onHandleChange} />
-      </div>
-      <div className="form-group">
-        <label>Mật khẩu:</label>
-        <input type="password" name="password" onChange={onHandleChange} />
-      </div>
-      <div className="form-group">
-        <label>Nhập lại Mật khẩu:</label>
-        <input type="password" name="confirmPass" onChange={onHandleChange} />
-      </div>
+    <Form
+      name="basic"
+      labelCol={{ span: 8 }}
+      wrapperCol={{ span: 16 }}
+      style={{ maxWidth: 600 }}
+      initialValues={{ remember: true }}
+      onFinish={onFinish}
+      onFinishFailed={onFinishFailed}
+      autoComplete="off"
+    >
+      <Form.Item label="Name" name="name">
+        <Input />
+      </Form.Item>
+      <Form.Item label="Email" name="email">
+        <Input />
+      </Form.Item>
 
-      <button type="submit">Đăng ký</button>
-    </form>
+      <Form.Item label="Password" name="password">
+        <Input.Password />
+      </Form.Item>
+      <Form.Item label="Confirm Password" name="confirmPass">
+        <Input.Password />
+      </Form.Item>
+
+      <Form.Item wrapperCol={{ offset: 8, span: 16 }}>
+        <Button type="primary" htmlType="submit">
+          Sign Up
+        </Button>
+      </Form.Item>
+    </Form>
   );
 };
 

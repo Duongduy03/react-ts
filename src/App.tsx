@@ -21,19 +21,33 @@ import SignInPage from "./pages/SignInPage";
 
 import ClientLayout from "./layout/ClientLayout";
 import AdminLayout from "./layout/AdminLayout";
-import { IProduct, IPropProduct, IUser } from "./interface/Interface";
+import { ICategory, IProduct, IUser } from "./interface/Interface";
 import { addUser, signin } from "./api/user";
 import { useNavigate } from "react-router-dom";
+import {
+  addCategory,
+  deleteCategory,
+  getAllCategory,
+  updateCategory,
+} from "./api/category";
+import CategoryManagement from "./admin/category/CategoryManagement";
+import AddCategory from "./admin/category/AddCategory";
+import UpdateCategory from "./admin/category/UpdateCategory";
 // import { useParams } from "react-router-dom";/
 function App() {
   const navigate = useNavigate();
   const [products, setProduct] = useState<IProduct[]>([]);
+  const [categories, setCategory] = useState<ICategory[]>([]);
   // const [product, setProducts] = useState({});
+  // console.log(categories);
 
   // console.log(id);
   useEffect(() => {
     getAllProduct().then(({ data }) => setProduct(data));
+    getAllCategory().then(({ data }) => setCategory(data));
   }, []);
+
+  // console.log(categories);
 
   // console.log(products);
   const onHandleRemove = (id: number | string) => {
@@ -43,14 +57,34 @@ function App() {
       })
       .then(() => alert("Xoa thanh cong"));
   };
+  const onHandleRemoveCate = (id: number | string) => {
+    deleteCategory(id)
+      .then(() => {
+        setCategory(categories.filter((category) => category._id !== id));
+      })
+      .then(() => alert("Xoa thanh cong"));
+  };
   const onHandleAdd = (product: IProduct) => {
     addProduct(product).then(() => setProduct([...products, product]));
+    navigate("/admin/products");
+    location.reload();
+  };
+  const onHandleAddCate = (category: ICategory) => {
+    addCategory(category).then(() => setCategory([...categories, category]));
+    navigate("/admin/categories");
+    location.reload();
   };
   const onHandleUpdate = (product: IProduct) => {
     // console.log(product);
     const newData = products.filter((pro) => pro._id != product._id);
     // console.log(newData);
     updateProduct(product).then(() => setProduct([...newData, product]));
+  };
+  const onHandleUpdateCate = (category: ICategory) => {
+    // console.log(category._id);
+    const newData = categories.filter((cate) => cate._id != category._id);
+    // console.log(newData);
+    updateCategory(category).then(() => setCategory([...newData, category]));
   };
   const onHandleAddUser = (user: IUser) => {
     addUser(user)
@@ -62,27 +96,25 @@ function App() {
       .then(({ data }) => {
         localStorage.setItem("accessToken", data.accessToken);
       })
+      .then(() => navigate("/admin"))
       .catch((error) => {
         alert(error.response.data.message);
       });
   };
-  const onHandleLogOut = () => {
-    localStorage.removeItem("accessToken");
-    location.reload();
-  };
+  // const onHandleLogOut = () => {
+  //   localStorage.removeItem("accessToken");
+  //   location.reload();
+  // };
   return (
     <div className="App">
       <Routes>
         <Route path="/" element={<ClientLayout />}>
-          <Route index element={<HomePage />} />
+          <Route index element={<HomePage products={products} />} />
           <Route
-            path="/products"
-            element={
-              <ProductPage products={products} onRemove={onHandleRemove} />
-            }
-          >
-            <Route path="/products/:id" element={<ProductDetailPage />} />
-          </Route>
+            path="products"
+            element={<ProductPage products={products} />}
+          />
+          <Route path="products/:id" element={<ProductDetailPage />} />
         </Route>
 
         <Route path="/admin" element={<AdminLayout />}>
@@ -97,11 +129,44 @@ function App() {
                 />
               }
             />
-            <Route path="add" element={<AddProduct onAdd={onHandleAdd} />} />
+            <Route
+              path="add"
+              element={
+                <AddProduct onAdd={onHandleAdd} categories={categories} />
+              }
+            />
             <Route
               path="update/:id"
               element={
-                <UpdateProduct products={products} onUpdate={onHandleUpdate} />
+                <UpdateProduct
+                  categories={categories}
+                  products={products}
+                  onUpdate={onHandleUpdate}
+                />
+              }
+            />
+          </Route>
+          <Route path="categories">
+            <Route
+              index
+              element={
+                <CategoryManagement
+                  categories={categories}
+                  onRemove={onHandleRemoveCate}
+                />
+              }
+            />
+            <Route
+              path="add"
+              element={<AddCategory onAdd={onHandleAddCate} />}
+            />
+            <Route
+              path="update/:id"
+              element={
+                <UpdateCategory
+                  categories={categories}
+                  onUpdate={onHandleUpdateCate}
+                />
               }
             />
           </Route>
@@ -112,9 +177,7 @@ function App() {
         />
         <Route
           path="/signin"
-          element={
-            <SignInPage onSignIn={onHandleSignin} onLogOut={onHandleLogOut} />
-          }
+          element={<SignInPage onSignIn={onHandleSignin} />}
         />
       </Routes>
     </div>
