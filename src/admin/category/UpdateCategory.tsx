@@ -19,7 +19,7 @@ const UpdateCategory = (props: IPropProduct) => {
   // console.log(props);
   useEffect(() => {
     const currentCategory = props.categories.find(
-      (category) => category._id == id
+      (category) => category._id === id
     );
 
     setCategory(currentCategory);

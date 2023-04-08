@@ -4,6 +4,8 @@ import { useParams } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import { ICategory, IProduct } from "../interface/Interface";
 import { Button, Form, Input, Select } from "antd";
+import type { FormInstance } from "antd/es/form";
+
 interface IPropProduct {
   products: IProduct[];
   categories: ICategory[];
@@ -14,15 +16,29 @@ const UpdateProduct = (props: IPropProduct) => {
   const navigate = useNavigate();
   const { id } = useParams();
   // console.log(id);
+  const { Option } = Select;
   // const [product, setProduct] = useState<IProduct[]>([]);
   const [product, setProduct] = useState<IProduct>();
+  const [category, setCategory] = useState<ICategory[]>([]);
 
-  // console.log(props);
+  console.log(product);
+  console.log(category);
+  const formRef = React.useRef<FormInstance>(null);
   useEffect(() => {
     const currentProduct = props.products.find((product) => product._id == id);
 
     setProduct(currentProduct);
+
+    setCategory(props.categories);
   }, [props]);
+  // console.log(category);
+  // console.log(product);
+
+  const newCate = category.filter((cate) => cate._id !== product?.categoryId);
+  const oneCate = category.filter((cate) => cate._id == product?.categoryId);
+
+  // console.log(oneCate);
+
   const [form] = Form.useForm();
   const setFields = () => {
     form.setFieldsValue({
@@ -47,7 +63,12 @@ const UpdateProduct = (props: IPropProduct) => {
   return (
     <div>
       <h2>Update</h2>
-      <Form form={form} style={{ maxWidth: 600 }} onFinish={onHandleUpdate}>
+      <Form
+        form={form}
+        ref={formRef}
+        style={{ maxWidth: 600 }}
+        onFinish={onHandleUpdate}
+      >
         {/* đoạn này cần truyền cả id vào form khi submit để lấy được giá trị id truyền lên component App */}
         <Form.Item
           label=""
@@ -82,13 +103,21 @@ const UpdateProduct = (props: IPropProduct) => {
         >
           <Input />
         </Form.Item>
-        <Form.Item label="Select" name="categoryId">
-          <Select>
-            {props.categories.map((cate) => {
-              return (
-                <Select.Option key={cate._id} value={cate._id}>
-                  {cate.name}
-                </Select.Option>
+        <Form.Item
+          name="categoryId"
+          label="Danh mục"
+          rules={[{ required: true, message: "Vui lòng chọn danh mục" }]}
+        >
+          <Select placeholder="Chọn danh mục" allowClear>
+            {category.map((category) => {
+              return category._id === product?.categoryId ? (
+                <Option key={category._id} value={category._id} selected>
+                  {category.name}
+                </Option>
+              ) : (
+                <Option key={category._id} value={category._id}>
+                  {category.name}
+                </Option>
               );
             })}
           </Select>

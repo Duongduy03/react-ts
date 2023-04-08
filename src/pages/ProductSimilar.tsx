@@ -7,27 +7,35 @@ const ProductSimilar = () => {
   const { id } = useParams();
   const [product, setProduct] = useState<IProduct>();
   const [products, setProducts] = useState<IProduct[]>([]);
+  const [product1, setProduct1] = useState<IProduct[]>([]);
   //   console.log(product);
 
   useEffect(() => {
-    getProductId(id).then(({ data }) => {
+    getProductId(String(id)).then(({ data }) => {
       setProduct(data);
     });
     getAllProduct().then(({ data }) => {
       setProducts(data);
     });
   }, []);
-  const newProduct = products.filter((pro) => pro._id != product?._id);
-  //   console.log(newProduct);
+  const newProduct: IProduct[] = products.filter(
+    (pro) => pro._id != product?._id
+  );
+  // console.log(product);
   const getPro = newProduct.filter(
     (pro) => pro.categoryId == product?.categoryId._id
   );
-  const get8Product = newProduct.slice(16, 24);
-  console.log(get8Product);
+  // console.log(newProduct);
+
+  const getProduct = newProduct.filter(
+    (pro) => pro.categoryId !== product?.categoryId._id
+  );
+  // console.log(getProduct);
   const click = () => {
+    // e.preventDefault();
     location.reload();
   };
-  document.getElementById("img")?.addEventListener("click", click());
+
   return (
     <div>
       {/* <h1>Các sản phẩm tương tự</h1> */}
@@ -40,23 +48,26 @@ const ProductSimilar = () => {
           {getPro.map((product) => {
             return (
               <div className="product-item" key={product._id}>
-                <Link to={`/products/${product._id}`}>
-                  <img
-                    src={product.image}
-                    alt=""
-                    className="product-img"
-                    id="img"
-                  />
-                </Link>
+                <img
+                  src={product.image}
+                  alt=""
+                  className="product-img"
+                  id="img"
+                />
+
                 <div className="product-top">
                   <h4>{product.name}</h4>
                   <img src="../src/images/star.svg" alt="" />
                 </div>
-
                 <div className="product-top">
                   <h3>$ {product.price}</h3>
                   <img src="../src/images/circle.svg" alt="" />
                 </div>
+                <Link to={`/products/${product._id}`} onClick={() => click()}>
+                  <button className="btn btn-primary" id="btn-reload">
+                    Xem chi tiết
+                  </button>
+                </Link>
               </div>
             );
           })}
@@ -70,17 +81,16 @@ const ProductSimilar = () => {
           <img src="./src/images/line.svg" alt="" />
         </div>
         <div className="products">
-          {get8Product.map((product) => {
+          {getProduct.map((product) => {
             return (
               <div className="product-item" key={product._id}>
-                <Link to={`/products/${product._id}`}>
-                  <img
-                    src={product.image}
-                    alt=""
-                    className="product-img"
-                    id="img"
-                  />
-                </Link>
+                <img
+                  src={product.image}
+                  alt=""
+                  className="product-img"
+                  id="img"
+                />
+
                 <div className="product-top">
                   <h4>{product.name}</h4>
                   <img src="../src/images/star.svg" alt="" />
@@ -90,6 +100,11 @@ const ProductSimilar = () => {
                   <h3>$ {product.price}</h3>
                   <img src="../src/images/circle.svg" alt="" />
                 </div>
+                <Link to={`/products/${product._id}`} onClick={() => click()}>
+                  <button className="btn btn-primary" id="btn-reload">
+                    Xem chi tiết
+                  </button>
+                </Link>
               </div>
             );
           })}

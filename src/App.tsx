@@ -18,11 +18,11 @@ import AddProduct from "./admin/AddProduct";
 import UpdateProduct from "./admin/UpdateProduct";
 import SignUpPage from "./pages/SignUpPage";
 import SignInPage from "./pages/SignInPage";
-
+import PageNotFound from "./pages/PageNotFound";
 import ClientLayout from "./layout/ClientLayout";
 import AdminLayout from "./layout/AdminLayout";
 import { ICategory, IProduct, IUser } from "./interface/Interface";
-import { addUser, signin } from "./api/user";
+import { addUser, getAllUser, signin } from "./api/user";
 import { useNavigate } from "react-router-dom";
 import {
   addCategory,
@@ -38,13 +38,15 @@ function App() {
   const navigate = useNavigate();
   const [products, setProduct] = useState<IProduct[]>([]);
   const [categories, setCategory] = useState<ICategory[]>([]);
+  const [user, setUser] = useState<IUser[]>([]);
   // const [product, setProducts] = useState({});
   // console.log(categories);
 
-  // console.log(id);
+  // console.log(user);
   useEffect(() => {
     getAllProduct().then(({ data }) => setProduct(data));
     getAllCategory().then(({ data }) => setCategory(data));
+    getAllUser().then(({ data }) => setUser(data));
   }, []);
 
   // console.log(categories);
@@ -79,6 +81,7 @@ function App() {
     const newData = products.filter((pro) => pro._id != product._id);
     // console.log(newData);
     updateProduct(product).then(() => setProduct([...newData, product]));
+    navigate("/admin/products");
   };
   const onHandleUpdateCate = (category: ICategory) => {
     // console.log(category._id);
@@ -94,17 +97,24 @@ function App() {
   const onHandleSignin = (user: IUser) => {
     signin(user)
       .then(({ data }) => {
+        // console.log(data.user);
+
         localStorage.setItem("accessToken", data.accessToken);
+        localStorage.setItem("user", JSON.stringify(data.user));
+        data.user.role === "admin" ? navigate("/admin") : navigate("/");
+        location.reload();
       })
-      .then(() => navigate("/admin"))
+
       .catch((error) => {
         alert(error.response.data.message);
       });
   };
-  // const onHandleLogOut = () => {
-  //   localStorage.removeItem("accessToken");
-  //   location.reload();
-  // };
+  const onHandleLogOut = () => {
+    localStorage.removeItem("accessToken");
+    localStorage.removeItem("user");
+    navigate("/");
+    // location.reload();
+  };
   return (
     <div className="App">
       <Routes>
@@ -117,7 +127,10 @@ function App() {
           <Route path="products/:id" element={<ProductDetailPage />} />
         </Route>
 
-        <Route path="/admin" element={<AdminLayout />}>
+        <Route
+          path="/admin"
+          element={<AdminLayout onLogOut={onHandleLogOut} />}
+        >
           <Route index element={<Dashboard />} />
           <Route path="products">
             <Route
@@ -179,6 +192,7 @@ function App() {
           path="/signin"
           element={<SignInPage onSignIn={onHandleSignin} />}
         />
+        <Route path="*" element={<PageNotFound />} />
       </Routes>
     </div>
   );

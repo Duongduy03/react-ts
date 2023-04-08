@@ -32,7 +32,10 @@ const SignInPage = (props: IPropUser) => {
       >
         <Form.Item
           name="email"
-          rules={[{ required: true, message: "Bạn chưa nhập email!" }]}
+          rules={[
+            { required: true, message: "Bạn chưa nhập email!" },
+            { type: "email", message: "Email phải đúng định dạng" },
+          ]}
         >
           <Input
             prefix={<UserOutlined className="site-form-item-icon" />}

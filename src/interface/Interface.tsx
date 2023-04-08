@@ -1,22 +1,23 @@
 import React from "react";
-
+interface ICategory {
+  _id: string | number;
+  name: string;
+  products?: IProduct[];
+}
 interface IProduct {
   _id: string | number;
   name: string;
   price: number;
   description: string;
   image: string;
-  categoryId: string;
+  categoryId: ICategory & string;
 }
-interface ICategory {
-  _id: string | number;
-  name: string;
-  products?: IProduct[];
-}
+
 interface IUser {
   _id: string | number;
   name: string;
   email: string;
+  role: string;
   password: string;
   confirmPass: string;
 }

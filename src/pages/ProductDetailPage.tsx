@@ -9,7 +9,7 @@ const ProductDetailPage = () => {
   const { id } = useParams();
   const [product, setProduct] = useState<IProduct>();
   useEffect(() => {
-    getProductId(id).then(({ data }) => {
+    getProductId(String(id)).then(({ data }) => {
       setProduct(data);
     });
   }, []);
@@ -43,7 +43,7 @@ const ProductDetailPage = () => {
                   <h3>$ {product?.price}</h3>
                   <h3>Thông tin </h3>
                   <p className="blog-desc">{product?.description}</p>
-                  <button className="btn btn-primary">Đặt hàng</button>
+                  <button className="btn btn-primary">Thêm vào giỏ hàng</button>
                 </div>
               </div>
             </div>

@@ -87,13 +87,13 @@ const ProductPage = (props: IPropProduct) => {
                 {getEightProduct.map((product) => {
                   return (
                     <div className="product-item" key={product._id}>
-                      <Link to={`/products/${product._id}`}>
+                      <a href={`/products/${product._id}`}>
                         <img
                           src={product.image}
                           alt=""
                           className="product-img"
                         />
-                      </Link>
+                      </a>
 
                       <div className="product-top">
                         <h4>{product.name}</h4>
