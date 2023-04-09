@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { IUser } from "../interface/Interface";
 import { Button, Checkbox, Form, Input } from "antd";
+import { LockOutlined, UserOutlined } from "@ant-design/icons";
 interface IPropUser {
   onAddUser: (inputValue: IUser) => void;
 }
@@ -19,36 +20,115 @@ const SignUpPage = (props: IPropUser) => {
   };
 
   return (
-    <Form
-      name="basic"
-      labelCol={{ span: 8 }}
-      wrapperCol={{ span: 16 }}
-      style={{ maxWidth: 600 }}
-      initialValues={{ remember: true }}
-      onFinish={onFinish}
-      onFinishFailed={onFinishFailed}
-      autoComplete="off"
-    >
-      <Form.Item label="Name" name="name">
-        <Input />
-      </Form.Item>
-      <Form.Item label="Email" name="email">
-        <Input />
-      </Form.Item>
+    <div className="duy">
+      <div className="form-signin-signup">
+        <Form
+          name="normal_login"
+          className="login-form"
+          style={{ maxWidth: 400 }}
+          initialValues={{ remember: true }}
+          onFinish={onFinish}
+        >
+          <h1>Form Sign Up</h1>
 
-      <Form.Item label="Password" name="password">
-        <Input.Password />
-      </Form.Item>
-      <Form.Item label="Confirm Password" name="confirmPass">
-        <Input.Password />
-      </Form.Item>
+          <hr />
+          <br />
+          <Form.Item
+            name="name"
+            rules={[{ required: true, message: "Bạn chưa nhập họ và tên!" }]}
+          >
+            <Input
+              prefix={<UserOutlined className="site-form-item-icon" />}
+              placeholder="Name"
+            />
+          </Form.Item>
+          <Form.Item
+            name="image"
+            rules={[{ required: true, message: "Bạn chưa nhập họ và tên!" }]}
+          >
+            <Input
+              prefix={<UserOutlined className="site-form-item-icon" />}
+              placeholder="Image"
+            />
+          </Form.Item>
+          <Form.Item
+            name="email"
+            rules={[
+              { required: true, message: "Bạn chưa nhập email!" },
+              { type: "email", message: "Email phải đúng định dạng" },
+            ]}
+          >
+            <Input
+              prefix={<UserOutlined className="site-form-item-icon" />}
+              placeholder="Email"
+            />
+          </Form.Item>
+          <Form.Item
+            name="password"
+            rules={[
+              { required: true, message: "Bạn chưa nhập mật khẩu!" },
+              { min: 6, message: "Mật khẩu phải nhiều hơn 6 kí tự" },
+            ]}
+          >
+            <Input
+              prefix={<LockOutlined className="site-form-item-icon" />}
+              type="password"
+              placeholder="Password"
+            />
+          </Form.Item>
+          <Form.Item
+            name="confirmPass"
+            rules={[
+              { required: true, message: "Bạn chưa nhập mật khẩu!" },
+              { min: 6, message: "Mật khẩu phải nhiều hơn 6 kí tự" },
+              ({ getFieldValue }) => ({
+                validator(_, value) {
+                  if (!value || getFieldValue("password") === value) {
+                    return Promise.resolve();
+                  }
+                  return Promise.reject(
+                    new Error("Mật khẩu của bạn hiện tại không khớp!")
+                  );
+                },
+              }),
+            ]}
+          >
+            <Input
+              prefix={<LockOutlined className="site-form-item-icon" />}
+              type="password"
+              placeholder="Confirm Password"
+            />
+          </Form.Item>
+          <Form.Item>
+            <Form.Item valuePropName="checked" noStyle>
+              <Checkbox>Remember me</Checkbox>
+            </Form.Item>
 
-      <Form.Item wrapperCol={{ offset: 8, span: 16 }}>
-        <Button type="primary" htmlType="submit">
-          Sign Up
-        </Button>
-      </Form.Item>
-    </Form>
+            <a className="login-form-forgot" href="">
+              Forgot password
+            </a>
+          </Form.Item>
+
+          <Form.Item>
+            <Button
+              type="primary"
+              htmlType="submit"
+              className="login-form-button"
+              style={{ marginRight: 2 }}
+            >
+              Sign up
+            </Button>
+            <Button
+              type="default"
+              htmlType="reset"
+              className="login-form-button"
+            >
+              Reset
+            </Button>
+          </Form.Item>
+        </Form>
+      </div>
+    </div>
   );
 };
 

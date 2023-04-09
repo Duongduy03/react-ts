@@ -1,6 +1,8 @@
 import { Link } from "react-router-dom";
 import { IProduct } from "../interface/Interface";
 import { useEffect, useState } from "react";
+import Slider from "./slider/Slider";
+
 interface IProps {
   products: IProduct[];
 }
@@ -11,13 +13,13 @@ const HomePage = (props: IProps) => {
     setProduct(props.products);
   }, [props]);
   // console.log(products);
-  const getMinProduct = products.slice(0, 4);
+  // const getMinProduct = products.slice(0, 4);
   // console.log(getMinProduct);
 
   return (
     <div>
       <article>
-        <iframe src="slider.html"></iframe>
+        <Slider />
       </article>
       <section className="designers">
         <div className="container">
@@ -105,10 +107,13 @@ const HomePage = (props: IProps) => {
             ultrices
           </p>
           <div className="products">
-            {getMinProduct.map((product) => {
+            {products.map((product) => {
               return (
                 <div className="product-item" key={product._id}>
-                  <img src={product.image} alt="" className="product-img" />
+                  <a href={`/products/${product._id}`}>
+                    <img src={product.image} alt="" className="product-img" />
+                  </a>
+
                   <div className="product-top">
                     <h4>{product.name}</h4>
                     <img src="./src/images/star.svg" alt="" />

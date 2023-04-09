@@ -33,6 +33,7 @@ const UpdateCategory = (props: IPropProduct) => {
     form.setFieldsValue({
       _id: category?._id,
       name: category?.name,
+      // products: category?.products,
     });
   };
   useEffect(() => {
@@ -62,7 +63,9 @@ const UpdateCategory = (props: IPropProduct) => {
         <Form.Item
           label="Category Name"
           name="name"
-          rules={[{ required: true, message: "Please input your username!" }]}
+          rules={[
+            { required: true, message: "Tên danh mục không được để trống!" },
+          ]}
         >
           <Input />
         </Form.Item>

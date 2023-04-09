@@ -12,6 +12,26 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 
 const HeaderCLient = () => {
+  const user = JSON.parse(localStorage.getItem("user") as string);
+  // console.log(user.image);
+  const imageUser = () => {
+    if (user) {
+      return (
+        <Link to="/">
+          <div className="user-author">
+            <img src={user.image} alt="" />
+          </div>
+        </Link>
+      );
+    } else {
+      return (
+        <Link to="/signin">
+          <FontAwesomeIcon icon={faUser} />
+        </Link>
+      );
+    }
+  };
+
   return (
     <header className="header">
       <div className="header-top">
@@ -55,13 +75,10 @@ const HeaderCLient = () => {
             <FontAwesomeIcon icon={faSearch} />
           </Link>
 
-          <Link to="/signin">
-            <FontAwesomeIcon icon={faUser} />
-          </Link>
-
           <Link to="">
             <FontAwesomeIcon icon={faCartArrowDown} />
           </Link>
+          {imageUser()}
         </div>
       </div>
     </header>

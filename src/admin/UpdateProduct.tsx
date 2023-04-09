@@ -47,6 +47,7 @@ const UpdateProduct = (props: IPropProduct) => {
       price: product?.price,
       description: product?.description,
       image: product?.image,
+      categoryId: product?.categoryId,
     });
   };
   useEffect(() => {

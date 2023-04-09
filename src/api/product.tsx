@@ -1,7 +1,7 @@
 import { IProduct } from "../interface/Interface";
 import instance from "./instance";
-const getAllProduct = () => {
-  return instance.get("/products");
+const getAllProduct = (keywords?: string) => {
+  return instance.get(`/products?_keywords=${keywords}`);
 };
 const getProductId = (id: string | number) => {
   return instance.get("/products/" + id);

@@ -2,7 +2,7 @@ import React from "react";
 interface ICategory {
   _id: string | number;
   name: string;
-  products?: IProduct[];
+  products: IProduct[];
 }
 interface IProduct {
   _id: string | number;
@@ -17,6 +17,7 @@ interface IUser {
   _id: string | number;
   name: string;
   email: string;
+  image:string,
   role: string;
   password: string;
   confirmPass: string;

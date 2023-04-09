@@ -33,21 +33,23 @@ import {
 import CategoryManagement from "./admin/category/CategoryManagement";
 import AddCategory from "./admin/category/AddCategory";
 import UpdateCategory from "./admin/category/UpdateCategory";
+import { authenticate } from "./utils/localStorage";
 // import { useParams } from "react-router-dom";/
 function App() {
   const navigate = useNavigate();
   const [products, setProduct] = useState<IProduct[]>([]);
   const [categories, setCategory] = useState<ICategory[]>([]);
   const [user, setUser] = useState<IUser[]>([]);
+  const [keyword, setKeyword] = useState("");
   // const [product, setProducts] = useState({});
   // console.log(categories);
 
   // console.log(user);
   useEffect(() => {
-    getAllProduct().then(({ data }) => setProduct(data));
+    getAllProduct(keyword).then(({ data }) => setProduct(data.docs));
     getAllCategory().then(({ data }) => setCategory(data));
     getAllUser().then(({ data }) => setUser(data));
-  }, []);
+  }, [keyword]);
 
   // console.log(categories);
 
@@ -85,9 +87,17 @@ function App() {
   };
   const onHandleUpdateCate = (category: ICategory) => {
     // console.log(category._id);
-    const newData = categories.filter((cate) => cate._id != category._id);
-    // console.log(newData);
-    updateCategory(category).then(() => setCategory([...newData, category]));
+    const newData = categories.map((item) =>
+      item._id === category._id ? category : item
+    );
+    console.log(newData);
+    updateCategory(category).then(() =>
+      setCategory(
+        categories.map((item) => (item._id === category._id ? category : item))
+      )
+    );
+    navigate("/admin/categories");
+    // location.reload();
   };
   const onHandleAddUser = (user: IUser) => {
     addUser(user)
@@ -100,9 +110,12 @@ function App() {
         // console.log(data.user);
 
         localStorage.setItem("accessToken", data.accessToken);
-        localStorage.setItem("user", JSON.stringify(data.user));
-        data.user.role === "admin" ? navigate("/admin") : navigate("/");
-        location.reload();
+        authenticate(data.user, () => {
+          data.user.role === "admin" ? navigate("/admin") : navigate("/");
+        });
+        // localStorage.setItem("user", JSON.stringify(data.user));
+
+        // location.reload();
       })
 
       .catch((error) => {
@@ -138,6 +151,7 @@ function App() {
               element={
                 <ProductManagement
                   products={products}
+                  onKeyWord={setKeyword}
                   onRemove={onHandleRemove}
                 />
               }

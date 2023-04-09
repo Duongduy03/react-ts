@@ -7,7 +7,7 @@ const ProductSimilar = () => {
   const { id } = useParams();
   const [product, setProduct] = useState<IProduct>();
   const [products, setProducts] = useState<IProduct[]>([]);
-  const [product1, setProduct1] = useState<IProduct[]>([]);
+  // const [product1, setProduct1] = useState<IProduct[]>([]);
   //   console.log(product);
 
   useEffect(() => {
@@ -31,9 +31,11 @@ const ProductSimilar = () => {
     (pro) => pro.categoryId !== product?.categoryId._id
   );
   // console.log(getProduct);
-  const click = () => {
+  const click = (e: any) => {
+    e.preventDefault();
     // e.preventDefault();
-    location.reload();
+
+    window.location.reload();
   };
 
   return (
@@ -63,7 +65,7 @@ const ProductSimilar = () => {
                   <h3>$ {product.price}</h3>
                   <img src="../src/images/circle.svg" alt="" />
                 </div>
-                <Link to={`/products/${product._id}`} onClick={() => click()}>
+                <Link to={`/products/${product._id}`} onClick={() => click("")}>
                   <button className="btn btn-primary" id="btn-reload">
                     Xem chi tiết
                   </button>
@@ -100,7 +102,7 @@ const ProductSimilar = () => {
                   <h3>$ {product.price}</h3>
                   <img src="../src/images/circle.svg" alt="" />
                 </div>
-                <Link to={`/products/${product._id}`} onClick={() => click()}>
+                <Link to={`/products/${product._id}`} onClick={() => click("")}>
                   <button className="btn btn-primary" id="btn-reload">
                     Xem chi tiết
                   </button>

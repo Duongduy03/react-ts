@@ -143,9 +143,6 @@ const ProductPage = (props: IPropProduct) => {
         </div>
       </section>
       <section className="magic">
-        <div className="magic-img">
-          <img src="./src/images/img27.png" alt="" />
-        </div>
         <h1>MAGIC SUMMER SALE 2022</h1>
       </section>
       <section className="user">
