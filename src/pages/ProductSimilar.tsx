@@ -12,16 +12,18 @@ const ProductSimilar = () => {
 
   useEffect(() => {
     getProductId(String(id)).then(({ data }) => {
+      // console.log(data);
+
       setProduct(data);
     });
-    getAllProduct().then(({ data }) => {
-      setProducts(data);
+    getAllProduct("").then(({ data }) => {
+      setProducts(data.docs);
     });
   }, []);
   const newProduct: IProduct[] = products.filter(
     (pro) => pro._id != product?._id
   );
-  // console.log(product);
+  console.log(products);
   const getPro = newProduct.filter(
     (pro) => pro.categoryId == product?.categoryId._id
   );

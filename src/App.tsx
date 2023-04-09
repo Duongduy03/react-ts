@@ -54,6 +54,8 @@ function App() {
   // console.log(categories);
 
   // console.log(products);
+
+  // Remove product
   const onHandleRemove = (id: number | string) => {
     deleteProduct(id)
       .then(() => {
@@ -61,6 +63,8 @@ function App() {
       })
       .then(() => alert("Xoa thanh cong"));
   };
+
+  // Remove category
   const onHandleRemoveCate = (id: number | string) => {
     deleteCategory(id)
       .then(() => {
@@ -68,16 +72,22 @@ function App() {
       })
       .then(() => alert("Xoa thanh cong"));
   };
+
+  // add product
   const onHandleAdd = (product: IProduct) => {
     addProduct(product).then(() => setProduct([...products, product]));
     navigate("/admin/products");
     location.reload();
   };
+
+  // add category
   const onHandleAddCate = (category: ICategory) => {
     addCategory(category).then(() => setCategory([...categories, category]));
     navigate("/admin/categories");
     location.reload();
   };
+
+  // update product
   const onHandleUpdate = (product: IProduct) => {
     // console.log(product);
     const newData = products.filter((pro) => pro._id != product._id);
@@ -85,6 +95,7 @@ function App() {
     updateProduct(product).then(() => setProduct([...newData, product]));
     navigate("/admin/products");
   };
+  // update category
   const onHandleUpdateCate = (category: ICategory) => {
     // console.log(category._id);
     const newData = categories.map((item) =>
@@ -99,11 +110,13 @@ function App() {
     navigate("/admin/categories");
     // location.reload();
   };
+  // sign up
   const onHandleAddUser = (user: IUser) => {
     addUser(user)
       .then(() => alert("Đăng ký thành công"))
       .then(() => navigate("/signin"));
   };
+  // sign in
   const onHandleSignin = (user: IUser) => {
     signin(user)
       .then(({ data }) => {
@@ -112,10 +125,10 @@ function App() {
         localStorage.setItem("accessToken", data.accessToken);
         authenticate(data.user, () => {
           data.user.role === "admin" ? navigate("/admin") : navigate("/");
+
+          location.reload();
         });
         // localStorage.setItem("user", JSON.stringify(data.user));
-
-        // location.reload();
       })
 
       .catch((error) => {

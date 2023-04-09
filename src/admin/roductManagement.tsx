@@ -32,11 +32,12 @@ const ProductManagement = (props: IPropProduct) => {
       <Link to={"/admin/products/add"}>
         <button className="btn btn-primary mb-3">Add New Product</button>
       </Link>
+      <br />
       <Space direction="vertical">
         <Search
-          placeholder="input search text"
+          placeholder="Tìm kiếm sản phẩm"
           onChange={onSearch}
-          style={{ width: 200 }}
+          style={{ width: 400 }}
         />
       </Space>
       <table className="table table-striped">

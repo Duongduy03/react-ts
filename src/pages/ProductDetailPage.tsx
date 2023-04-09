@@ -10,6 +10,8 @@ const ProductDetailPage = () => {
   const [product, setProduct] = useState<IProduct>();
   useEffect(() => {
     getProductId(String(id)).then(({ data }) => {
+      // console.log(data);
+
       setProduct(data);
     });
   }, []);

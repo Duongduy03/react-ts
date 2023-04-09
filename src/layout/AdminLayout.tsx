@@ -33,6 +33,7 @@ const AdminLayout = (props: IProps) => {
   //   return navigate("/");
   // }
   document.getElementById("btn-logout")?.addEventListener("click", () => {
+    // e.preventDefault();
     props.onLogOut();
   });
   if (user) {

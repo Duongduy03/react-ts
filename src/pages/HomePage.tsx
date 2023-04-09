@@ -13,7 +13,7 @@ const HomePage = (props: IProps) => {
     setProduct(props.products);
   }, [props]);
   // console.log(products);
-  // const getMinProduct = products.slice(0, 4);
+  const getMinProduct = products.slice(10, 18);
   // console.log(getMinProduct);
 
   return (
@@ -107,7 +107,7 @@ const HomePage = (props: IProps) => {
             ultrices
           </p>
           <div className="products">
-            {products.map((product) => {
+            {getMinProduct.map((product) => {
               return (
                 <div className="product-item" key={product._id}>
                   <a href={`/products/${product._id}`}>
